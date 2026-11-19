@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Applications | Job Application Tracker{% endblock %}
+
+{% block content %}
+<h2>Add an Application</h2>
+
+<!-- Show validation messages from the Flask route. -->
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+<!-- Each application is associated with a saved job. -->
+{% if jobs %}
+<form method="post" action="{{ url_for('applications') }}">
+    <p>
+        <label for="job_id">Job*</label>
+        <select id="job_id" name="job_id" required>
+            <option value="">Choose a job</option>
+            {% for job in jobs %}
+                <option value="{{ job.job_id }}">
+                    {{ job.job_title }} — {{ job.company_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        <label for="application_date">Application date*</label>
+        <input
+            id="application_date"
+            type="date"
+            name="application_date"
+            required
+        >
+    </p>
+
+    <p>
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            <option value="Applied">Applied</option>
+            <option value="Screening">Screening</option>
+            <option value="Interview">Interview</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+        </select>
+    </p>
+
+    <p>
+        <label for="resume_version">Resume version</label>
+        <input
+            id="resume_version"
+            name="resume_version"
+            placeholder="Example: IT Resume Nov 2026"
+        >
+    </p>
+
+    <p>
+        <label>
+            <input type="checkbox" name="cover_letter_sent" value="1">
+            Cover letter sent
+        </label>
+    </p>
+
+    <p>
+        <label for="interview_notes">Interview notes</label>
+        <textarea
+            id="interview_notes"
+            name="interview_notes"
+            placeholder="Add interview dates, feedback, or reminders"
+        ></textarea>
+    </p>
+
+    <button type="submit">Save Application</button>
+</form>
+{% else %}
+    <p>Add a job before adding an application.</p>
+{% endif %}
+
+<h2>Applications</h2>
+
+<!-- List applications with their related job and company details. -->
+{% if applications %}
+<table>
+    <thead>
+        <tr>
+            <th>Job</th>
+            <th>Company</th>
+            <th>Applied</th>
+            <th>Status</th>
+            <th>Resume version</th>
+            <th>Cover letter sent</th>
+            <th>Interview notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.job_title }}</td>
+            <td>{{ application.company_name }}</td>
+            <td>{{ application.application_date }}</td>
+            <td>{{ application.status }}</td>
+            <td>{{ application.resume_version or "—" }}</td>
+            <td>
+                {% if application.cover_letter_sent %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </td>
+            <td>{{ application.interview_notes or "—" }}</td>
+            <td class="actions">
+                <a href="{{ url_for('edit_application', application_id=application.application_id) }}">
+                    Edit
+                </a>
+
+                <form
+                    method="post"
+                    action="{{ url_for('delete_application', application_id=application.application_id) }}"
+                    onsubmit="return confirm('Delete this application?');"
+                >
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No applications added yet.</p>
+{% endif %}
+{% endblock %}

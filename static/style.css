@@ -1,0 +1,208 @@
+/* Shared colors and spacing for the application. */
+:root {
+    --navy: #183153;
+    --blue: #2563a6;
+    --pale-blue: #e8f1ff;
+    --page-bg: #f4f7fb;
+    --card-bg: #ffffff;
+    --border: #d7e0ea;
+    --text: #263445;
+    --muted: #68788a;
+}
+
+/* Set the base page appearance. */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+}
+
+/* Style the shared site heading and navigation. */
+header {
+    background: var(--navy);
+    color: white;
+    padding: 1.25rem max(1.5rem, calc((100% - 1200px) / 2));
+}
+
+header h1 {
+    margin: 0 0 0.75rem;
+}
+
+nav a {
+    color: white;
+    margin-right: 0.25rem;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Keep page content centered and readable. */
+main {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 2rem auto;
+}
+
+h2 {
+    color: var(--navy);
+    margin-top: 1.75rem;
+}
+
+/* Give forms and page sections a clear background. */
+form {
+    margin: 1rem 0;
+}
+
+form p {
+    margin: 0.9rem 0;
+}
+
+input,
+select,
+textarea {
+    max-width: 100%;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid #b8c5d3;
+    border-radius: 5px;
+    font: inherit;
+}
+
+textarea {
+    min-height: 5rem;
+    vertical-align: middle;
+}
+
+button {
+    padding: 0.5rem 0.8rem;
+    border: 0;
+    border-radius: 5px;
+    background: var(--blue);
+    color: white;
+    cursor: pointer;
+    font: inherit;
+}
+
+button:hover {
+    background: var(--navy);
+}
+
+/* Make database tables easier to scan. */
+table {
+    width: 100%;
+    margin: 1rem 0 2rem;
+    border-collapse: collapse;
+    background: var(--card-bg);
+}
+
+th,
+td {
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background: #edf2f7;
+    color: var(--navy);
+}
+
+/* Format salary values and required-skill badges on the Jobs page. */
+.salary {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.skill-tag {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: var(--pale-blue);
+    color: #174ea6;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* Keep edit and delete controls together in table rows. */
+.actions {
+    white-space: nowrap;
+}
+
+.actions form {
+    display: inline-block;
+    margin: 0 0 0 0.4rem;
+}
+
+/* Display dashboard totals as responsive cards. */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 2rem;
+}
+
+.stat-card {
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--blue);
+    border-radius: 8px;
+    background: var(--card-bg);
+    box-shadow: 0 2px 7px rgb(24 49 83 / 8%);
+}
+
+.stat-card h3 {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.stat-card p {
+    margin: 0.4rem 0 0;
+    color: var(--navy);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Make validation messages visible. */
+.error {
+    padding: 0.7rem 0.9rem;
+    border-left: 4px solid #bd3434;
+    border-radius: 4px;
+    background: #fff0f0;
+    color: #8f2020;
+}
+
+/* Adjust spacing for narrow screens. */
+@media (max-width: 650px) {
+    main {
+        width: calc(100% - 1.25rem);
+        margin: 1.25rem auto;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    header {
+        padding: 1rem;
+    }
+}

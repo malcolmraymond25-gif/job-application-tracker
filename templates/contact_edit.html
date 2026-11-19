@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Contact | Job Application Tracker{% endblock %}
+
+{% block content %}
+<h2>Edit Contact</h2>
+
+<!-- Display validation feedback while keeping entered values. -->
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+<form method="post">
+    <p>
+        <label for="company_id">Company*</label>
+        <select id="company_id" name="company_id" required>
+            <option value="">Choose a company</option>
+            {% for company in companies %}
+                <option
+                    value="{{ company.company_id }}"
+                    {% if company.company_id == contact.company_id %}selected{% endif %}
+                >
+                    {{ company.company_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        <label for="contact_name">Contact name*</label>
+        <input
+            id="contact_name"
+            name="contact_name"
+            value="{{ contact.contact_name }}"
+            required
+        >
+    </p>
+
+    <p>
+        <label for="title">Title</label>
+        <input id="title" name="title" value="{{ contact.title or '' }}">
+    </p>
+
+    <p>
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" value="{{ contact.email or '' }}">
+    </p>
+
+    <p>
+        <label for="phone">Phone</label>
+        <input id="phone" type="tel" name="phone" value="{{ contact.phone or '' }}">
+    </p>
+
+    <p>
+        <label for="linkedin_url">LinkedIn URL</label>
+        <input
+            id="linkedin_url"
+            type="url"
+            name="linkedin_url"
+            value="{{ contact.linkedin_url or '' }}"
+        >
+    </p>
+
+    <p>
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes">{{ contact.notes or '' }}</textarea>
+    </p>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<p><a href="{{ url_for('contacts') }}">Back to Contacts</a></p>
+{% endblock %}

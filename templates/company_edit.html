@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Company | Job Application Tracker{% endblock %}
+
+{% block content %}
+<h2>Edit Company</h2>
+
+{% if error %}
+    <p>{{ error }}</p>
+{% endif %}
+
+<form method="post">
+    <p>
+        <label>
+            Company name*
+            <input
+                type="text"
+                name="company_name"
+                value="{{ company.company_name }}"
+                required
+            >
+        </label>
+    </p>
+
+    <p><label>Industry <input name="industry" value="{{ company.industry or '' }}"></label></p>
+    <p><label>Website <input name="website" value="{{ company.website or '' }}"></label></p>
+    <p><label>City <input name="city" value="{{ company.city or '' }}"></label></p>
+    <p><label>State <input name="state" value="{{ company.state or '' }}"></label></p>
+    <p><label>Notes <textarea name="notes">{{ company.notes or '' }}</textarea></label></p>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<p><a href="{{ url_for('companies') }}">Back to Companies</a></p>
+{% endblock %}

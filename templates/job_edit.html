@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Job | Job Application Tracker{% endblock %}
+
+{% block content %}
+<h2>Edit Job</h2>
+
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+<form method="post">
+    <p>
+        <label for="company_id">Company*</label>
+        <select id="company_id" name="company_id" required>
+            <option value="">Choose a company</option>
+            {% for company in companies %}
+                <option
+                    value="{{ company.company_id }}"
+                    {% if company.company_id == job.company_id %}selected{% endif %}
+                >
+                    {{ company.company_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        <label for="job_title">Job title*</label>
+        <input id="job_title" name="job_title" value="{{ job.job_title }}" required>
+    </p>
+
+    <p>
+        <label for="job_type">Job type</label>
+        <select id="job_type" name="job_type">
+            <option value="">Choose a type</option>
+            {% for type in ["Full-time", "Part-time", "Contract", "Internship"] %}
+                <option value="{{ type }}" {% if job.job_type == type %}selected{% endif %}>
+                    {{ type }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p><label for="salary_min">Minimum salary</label>
+        <input id="salary_min" type="number" name="salary_min" value="{{ job.salary_min or '' }}">
+    </p>
+
+    <p><label for="salary_max">Maximum salary</label>
+        <input id="salary_max" type="number" name="salary_max" value="{{ job.salary_max or '' }}">
+    </p>
+
+    <p><label for="job_url">Job URL</label>
+        <input id="job_url" type="url" name="job_url" value="{{ job.job_url or '' }}">
+    </p>
+
+    <p><label for="date_posted">Date posted</label>
+        <input id="date_posted" type="date" name="date_posted" value="{{ job.date_posted or '' }}">
+    </p>
+
+    <p>
+        <label for="requirements">Required skills</label>
+        <input
+            id="requirements"
+            name="requirements"
+            value="{{ job.requirements_text }}"
+        >
+        <small>Separate skills with commas.</small>
+    </p>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<p><a href="{{ url_for('jobs') }}">Back to Jobs</a></p>
+{% endblock %}

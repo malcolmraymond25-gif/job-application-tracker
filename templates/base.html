@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Set page encoding and support mobile-sized screens. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Job Application Tracker{% endblock %}</title>
+
+    <!-- Load the shared project stylesheet. -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Job Application Tracker</h1>
+
+        <!-- Main navigation shared by all pages. -->
+        <nav>
+            <a href="/">Dashboard</a> |
+            <a href="{{ url_for('companies') }}">Companies</a> |
+            <a href="{{ url_for('jobs') }}">Jobs</a> |
+            <a href="{{ url_for('applications') }}">Applications</a> |
+            <a href="{{ url_for('contacts') }}">Contacts</a> |
+            <a href="{{ url_for('job_match') }}">Job Match</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

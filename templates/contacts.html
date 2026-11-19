@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Contacts | Job Application Tracker{% endblock %}
+
+{% block content %}
+<h2>Add a Contact</h2>
+
+<!-- Show validation feedback from the Flask route. -->
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+<!-- Contacts must belong to a company. -->
+{% if companies %}
+<form method="post" action="{{ url_for('contacts') }}">
+    <p>
+        <label for="company_id">Company*</label>
+        <select id="company_id" name="company_id" required>
+            <option value="">Choose a company</option>
+            {% for company in companies %}
+                <option value="{{ company.company_id }}">
+                    {{ company.company_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        <label for="contact_name">Contact name*</label>
+        <input id="contact_name" name="contact_name" required>
+    </p>
+
+    <p>
+        <label for="title">Title</label>
+        <input id="title" name="title" placeholder="Example: Recruiter">
+    </p>
+
+    <p>
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email">
+    </p>
+
+    <p>
+        <label for="phone">Phone</label>
+        <input id="phone" type="tel" name="phone">
+    </p>
+
+    <p>
+        <label for="linkedin_url">LinkedIn URL</label>
+        <input id="linkedin_url" type="url" name="linkedin_url">
+    </p>
+
+    <p>
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes"></textarea>
+    </p>
+
+    <button type="submit">Save Contact</button>
+</form>
+{% else %}
+    <p>Add a company before adding a contact.</p>
+{% endif %}
+
+<h2>Contacts</h2>
+
+<!-- Display saved contacts and their associated companies. -->
+{% if contacts %}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Title</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>LinkedIn</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+        <tr>
+            <td>{{ contact.contact_name }}</td>
+            <td>{{ contact.company_name }}</td>
+            <td>{{ contact.title or "—" }}</td>
+            <td>{{ contact.email or "—" }}</td>
+            <td>{{ contact.phone or "—" }}</td>
+            <td>
+                {% if contact.linkedin_url %}
+                    <a href="{{ contact.linkedin_url }}" target="_blank" rel="noopener noreferrer">
+                        Profile
+                    </a>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <td>{{ contact.notes or "—" }}</td>
+            <td class="actions">
+                <a href="{{ url_for('edit_contact', contact_id=contact.contact_id) }}">
+                    Edit
+                </a>
+
+                <form
+                    method="post"
+                    action="{{ url_for('delete_contact', contact_id=contact.contact_id) }}"
+                    onsubmit="return confirm('Delete this contact?');"
+                >
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No contacts added yet.</p>
+{% endif %}
+{% endblock %}

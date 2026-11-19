@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Job Match | Job Application Tracker{% endblock %}
+
+{% block content %}
+<h2>Job Match</h2>
+
+<p>Enter your skills to see how closely they match the requirements for each job.</p>
+
+<!-- Skills are entered as a comma-separated list. -->
+<form method="post" action="{{ url_for('job_match') }}">
+    <p>
+        <label for="skills">Your skills</label>
+        <textarea
+            id="skills"
+            name="skills"
+            placeholder="Python, SQL, Flask"
+            required
+        >{{ skills_text }}</textarea>
+    </p>
+
+    <button type="submit">Match Jobs</button>
+</form>
+
+<!-- Show validation feedback if the submitted skills were empty. -->
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+<!-- Display jobs ranked by their calculated skill match. -->
+{% if submitted and results %}
+    <h2>Matching Jobs</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Job</th>
+                <th>Company</th>
+                <th>Match</th>
+                <th>Matched skills</th>
+                <th>Missing skills</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in results %}
+            <tr>
+                <td>
+                    {% if job.job_url %}
+                        <a href="{{ job.job_url }}" target="_blank" rel="noopener noreferrer">
+                            {{ job.job_title }}
+                        </a>
+                    {% else %}
+                        {{ job.job_title }}
+                    {% endif %}
+                    {% if job.job_type %}
+                        <br><small>{{ job.job_type }}</small>
+                    {% endif %}
+                </td>
+                <td>{{ job.company_name }}</td>
+
+                <td>
+                    {% if job.no_requirements %}
+                        Not calculated
+                    {% else %}
+                        <strong>{{ job.match_percent }}%</strong>
+                        <br>
+                        <small>
+                            {{ job.matched_skills|length }}/{{ job.required_skills|length }} skills
+                        </small>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if job.matched_skills %}
+                        <div class="skill-list">
+                            {% for skill in job.matched_skills %}
+                                <span class="skill-tag">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if job.no_requirements %}
+                        No requirements listed
+                    {% elif job.missing_skills %}
+                        <div class="skill-list">
+                            {% for skill in job.missing_skills %}
+                                <span class="muted">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% elif submitted and not error %}
+    <p>No jobs are available to compare yet. Add a job with required skills first.</p>
+{% endif %}
+{% endblock %}
